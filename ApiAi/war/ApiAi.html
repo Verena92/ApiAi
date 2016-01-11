@@ -1,8 +1,10 @@
 <html>
 <head>
-	<title>API Example</title>
+	<title>API.ai Beispiel</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<h1>API.ai Beispiel</h1>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<div>Um eine Aufnahme zu tätigen bitte den Button "Speak" klicken - um die Aufnahme zu beenden den Button "Stop" betätigen</div>
 	<script type="text/javascript">
 		var accessToken = "191c0569aa014c008b3b127a513de79d";
 		var subscriptionKey = "41d61c76-f9aa-4f05-a258-bf06f54b59cf";
@@ -86,17 +88,34 @@
 		}
 	</script>
 	<style type="text/css">
-		body { width: 500px; margin: 0 auto; text-align: center; margin-top: 20px; }
-		div {  position: absolute; }
-		input { width: 400px; }
-		button { width: 50px; }
-		textarea { width: 100%; }
+		h1 { 
+			font-family: Helvetica; }
+		body 
+			{ width: 500px; 
+			margin: 0 auto; 
+			text-align: center; 
+			margin-top: 20px; }
+		div {  
+			font-family: Helvetica; 
+			}
+		input { 
+			top: 210px;
+			width: 500px; 
+			height: 200px; 
+			text-align: center;	}
+		button { 
+			width: 50px; 
+			top: 300px;}
+		textarea { 
+			width: 100%; }
 	</style>
 </head>
 <body>
 	<div>
-		<input id="input" type="text"> <button id="rec">Speak</button>
-		<!-- <br>Response<br> <textarea id="response" cols="40" rows="20"></textarea> -->
+		<input id="input" type="text"> 
+		<button id="rec">Speak</button>
+		<!-- <br>Response<br> 
+		<textarea id="response" cols="40" rows="20"></textarea> -->
 	</div>
 </body>
 </html>
