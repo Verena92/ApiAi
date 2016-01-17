@@ -1,14 +1,20 @@
 <html>
-<head>
+	<head>
 	<title>API.ai Beispiel</title>
+	
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
 	<h1>API.ai Beispiel</h1>
+	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	
 	<div>Um eine Aufnahme zu tätigen bitte den Button "Speak" klicken - um die Aufnahme zu beenden den Button "Stop" betätigen</div>
+	
 	<script type="text/javascript">
 		var accessToken = "191c0569aa014c008b3b127a513de79d";
 		var subscriptionKey = "41d61c76-f9aa-4f05-a258-bf06f54b59cf";
 		var baseUrl = "https://api.api.ai/v1/";
+		
 		$(document).ready(function() {
 			$("#input").keypress(function(event) {
 				if (event.which == 13) {
@@ -20,11 +26,17 @@
 				switchRecognition();
 			});
 		});
+		
 		var recognition;
 		function startRecognition() {
 			recognition = new webkitSpeechRecognition();
 			recognition.onstart = function(event) {
 				updateRec();
+			};
+			recognition.start();
+			recognition.lang = "en-US";
+			recognition.onend = function() {
+				stopRecognition();
 			};
 			recognition.onresult = function(event) {
 				var text = "";
@@ -34,11 +46,6 @@
 			    setInput(text);
 				stopRecognition();
 			};
-			recognition.onend = function() {
-				stopRecognition();
-			};
-			recognition.lang = "en-US";
-			recognition.start();
 		}
 	
 		function stopRecognition() {
@@ -48,6 +55,7 @@
 			}
 			updateRec();
 		}
+		
 		function switchRecognition() {
 			if (recognition) {
 				stopRecognition();
@@ -55,13 +63,17 @@
 				startRecognition();
 			}
 		}
+		
 		function setInput(text) {
 			$("#input").val(text);
 			send();
 		}
+		
 		function updateRec() {
 			$("#rec").text(recognition ? "Stop" : "Speak");
 		}
+		
+		/*Diese Funktion sendet die Eingabe an die API.ai*/
 		function send() {
 			var text = $("#input").val();
 			$.ajax({
@@ -74,22 +86,14 @@
 					"ocp-apim-subscription-key": subscriptionKey
 				},
 				data: JSON.stringify({ q: text, lang: "en" }),
-				success: function(data) {
-					setResponse(JSON.stringify(data, undefined, 2));
-				},
-				error: function() {
-					setResponse("Internal Server Error");
-				}
 			});
-			setResponse("Loading...");
 		}
-		function setResponse(val) {
-			$("#response").text(val);
-		}
+		
+
 	</script>
 	<style type="text/css">
 		h1 { 
-			font-family: Helvetica; }
+			font-family: Verdana; }
 		body 
 			{ width: 500px; 
 			margin: 0 auto; 
@@ -112,10 +116,8 @@
 </head>
 <body>
 	<div>
-		<input id="input" type="text"> 
+		<textarea id="input" type="text" cols="40" rows="20"> </textarea>
 		<button id="rec">Speak</button>
-		<!-- <br>Response<br> 
-		<textarea id="response" cols="40" rows="20"></textarea> -->
 	</div>
 </body>
 </html>
