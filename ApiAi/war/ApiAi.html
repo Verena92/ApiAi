@@ -3,6 +3,7 @@
 		<title>API.ai Beispiel</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<h1>API.ai Beispiel</h1>
+		<!-- Einbinden von JQuery (Bibliothek) direkt von Google, nicht lokal-->
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 	</head>
 	<body>
@@ -14,12 +15,18 @@
 	</body>
 </html>
 
-
+<!-- Einbinden von Javascript
+		Variablen anlegen:
+		Access token und Key werden über die Oberfläche von API.ai generiert und hier übernommen
+		base URL bildet Basis für den Zugriff auf den Webservice-->
+		
 <script type="text/javascript">
 	var accessToken = "191c0569aa014c008b3b127a513de79d";
 	var subscriptionKey = "41d61c76-f9aa-4f05-a258-bf06f54b59cf";
 	var baseUrl = "https://api.api.ai/v1/";
 		
+	/*Input  ?
+	Beim Drücken der Eingabetaste wird Funktion senden aufgerufen!? Noch unklar!*/
 	$(document).ready(function() {
 		$("#input").keypress(function(event) {
 			if (event.which == 13) {
@@ -27,6 +34,7 @@
 			send();
 				}
 		});
+		/*Klick auf den Button Rec ruft die Funktion Switch Recognition auf*/
 		$("#rec").click(function(event) {
 			switchRecognition();
 			});
@@ -34,25 +42,34 @@
 		
 	var recognition;
 	function startRecognition() {
+		/*Erlaubt der Seite Zugriff auf das Mikrofon*/
 		recognition = new webkitSpeechRecognition();
+		recognition.continuous = true;
+		/*Bei Start der Erkennung wird Update Rec aufgerufen*/
 		recognition.onstart = function(event) {
 			updateRec();
 		};
+		/*Sprache für die Erkennung wird festgelegt, Erkennung gestartet*/
 		recognition.start();
 		recognition.lang = "en-US";
 		recognition.onend = function() {
 			stopRecognition();
 		};
 		recognition.onresult = function(event) {
+		/*Leere Variable Text wird angelegt
+		Alle Ergebnisse werden in die Variable Text gespeichert?*/
 			var text = "";
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
 			    text += event.results[i][0].transcript;
 			}
+			/*Funktion setInput wird mit dem Ergebnis der Recognition aufgerufen
+			Erkennung wird gestoppt*/
 			setInput(text);
 			stopRecognition();
 		};
 	}
-	
+	/*Falls die Erkennung läuft, wird sie gestoppt und der Wert der Variable auf Null zurückgesetzt
+	Anschließend wird update Rec aufgerufen*/
 	function stopRecognition() {
 		if (recognition) {
 			recognition.stop();
@@ -60,7 +77,7 @@
 		}
 		updateRec();
 	}
-		
+	/*Falls die Erkennung läuft wird sie gestoppt, falls nicht gestartet*/
 	function switchRecognition() {
 		if (recognition) {
 			stopRecognition();
@@ -68,12 +85,12 @@
 			startRecognition();
 		}
 	}
-		
+	/*Input wird der Wert aus Text zugewiesen, Funktion senden wird aufgerufen*/
 	function setInput(text) {
 		$("#input").val(text);
 		send();
 	}
-		
+	/*Rec wird entweder der Wert Stop oder Speak zugewiesen*/
 	function updateRec() {
 		$("#rec").text(recognition ? "Stop" : "Speak");
 	}
@@ -81,15 +98,21 @@
 	/*Diese Funktion sendet die Eingabe an die API.ai*/
 	function send() {
 		var text = $("#input").val();
+		/*Aufruf des Webservice über ajax*/
 		$.ajax({
+			/*Typ POST sendet etwas an den Service*/
 			type: "POST",
+			/*Die basis url wird um "query" ergänzt und aufgerufen*/
 			url: baseUrl + "query/",
+			/*Inhalts- und Datentyp werden als Json festgelegt*/
 			contentType: "application/json; charset=utf-8",
 			dataType: "json",
+			/*Die definierten Token und Key werden im Header übergeben für die Autorisierung des Zugriffs*/
 			headers: {
 				"Authorization": "Bearer " + accessToken,
 				"ocp-apim-subscription-key": subscriptionKey
 			},
+			/*Objekt wird in einen JSON umgewandelt*/
 			data: JSON.stringify({ q: text, lang: "en" }),
 		});
 	}	
