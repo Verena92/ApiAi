@@ -25,16 +25,8 @@
 	var subscriptionKey = "41d61c76-f9aa-4f05-a258-bf06f54b59cf";
 	var baseUrl = "https://api.api.ai/v1/";
 		
-	/*Input  ?
-	Beim Drücken der Eingabetaste wird Funktion senden aufgerufen!? Noch unklar!*/
+	/*Funktion bereit, sobald Seite vollständig gelanden.Klick auf den Speak-Button #rec ruft die Funktion switchrecognition() auf*/
 	$(document).ready(function() {
-		$("#input").keypress(function(event) {
-			if (event.which == 13) {
-			event.preventDefault();
-			send();
-				}
-		});
-		/*Klick auf den Button Rec ruft die Funktion Switch Recognition auf*/
 		$("#rec").click(function(event) {
 			switchRecognition();
 			});
@@ -42,9 +34,8 @@
 		
 	var recognition;
 	function startRecognition() {
-		/*Erlaubt der Seite Zugriff auf das Mikrofon*/
+		/*Erlaubt der Seite Zugriff auf das Mikrofon - webkitSpeechRecognition Objekt stellt das Speech Interface bereit und definiert Eventhandler*/*/
 		recognition = new webkitSpeechRecognition();
-		recognition.continuous = true;
 		/*Bei Start der Erkennung wird Update Rec aufgerufen*/
 		recognition.onstart = function(event) {
 			updateRec();
@@ -56,8 +47,7 @@
 			stopRecognition();
 		};
 		recognition.onresult = function(event) {
-		/*Leere Variable Text wird angelegt
-		Alle Ergebnisse werden in die Variable Text gespeichert?*/
+		/*Leere Variable text wird angelegt. Alle Ergebnisse werden im Array gespeichert*/
 			var text = "";
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
 			    text += event.results[i][0].transcript;
